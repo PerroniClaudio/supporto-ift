@@ -2,7 +2,7 @@
  * Lista dei ticket aperti da un utente specifico.
  */
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { RxArrowTopRight } from "react-icons/rx";
 import {
     FaPlus,
@@ -11,53 +11,201 @@ import {
     FaChevronRight,
 } from "react-icons/fa";
 import { BiFilter } from "react-icons/bi";
-import { useTable } from "react-table";
+import { DataTable } from "../../Components/DataTable";
+import { RiArrowUpDownFill } from "react-icons/ri";
 
-function Index() {
-    const data = useMemo(
-        () => [
-            {
-                col1: "Ticket #1",
-                col2: "Cannolo",
-            },
-            {
-                col1: "Ticket #2",
-                col2: "Cassata",
-            },
-            {
-                col1: "Ticket #3",
-                col2: "Brioche",
-            },
-            {
-                col1: "Ticket #4",
-                col2: "Gelato",
-            },
-            {
-                col1: "Ticket #5",
-                col2: "Granita",
-            },
-        ],
-        []
-    );
+const dateTimeOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    minute: "2-digit",
+    hour: "2-digit",
+};
 
+function Index({ tickets }) {
     const columns = useMemo(
         () => [
             {
-                Header: "Ticket",
-                accessor: "col1", // accessor is the "key" in the data
+                header: "ID",
+                accessorKey: "col1",
             },
             {
-                Header: "Titolo",
-                accessor: "col2",
+                header: ({ column }) => {
+                    return (
+                        <button
+                            className="bg-transparent border-none flex items-center justify-between w-full"
+                            onClick={() =>
+                                column.toggleSorting(
+                                    column.getIsSorted() === "asc"
+                                )
+                            }
+                        >
+                            <span>Problema/Richiesta</span>
+                            <RiArrowUpDownFill />
+                        </button>
+                    );
+                },
+                accessorKey: "col2",
+            },
+            {
+                header: ({ column }) => {
+                    return (
+                        <button
+                            className="bg-transparent border-none hidden lg:flex items-center justify-between w-full "
+                            onClick={() =>
+                                column.toggleSorting(
+                                    column.getIsSorted() === "asc"
+                                )
+                            }
+                        >
+                            <span>Data</span>
+                            <RiArrowUpDownFill />
+                        </button>
+                    );
+                },
+                accessorKey: "col3",
+                cell: ({ row }) => {
+                    return (
+                        <p className="hidden lg:flex">
+                            {row
+                                .getValue("col3")
+                                .toLocaleDateString("it-IT", dateTimeOptions)}
+                        </p>
+                    );
+                },
+            },
+            {
+                header: ({ column }) => {
+                    return (
+                        <button
+                            className="bg-transparent border-none hidden lg:flex items-center justify-between w-full"
+                            onClick={() =>
+                                column.toggleSorting(
+                                    column.getIsSorted() === "asc"
+                                )
+                            }
+                        >
+                            <span>Scadenza</span>
+                            <RiArrowUpDownFill />
+                        </button>
+                    );
+                },
+                accessorKey: "col4",
+                cell: ({ row }) => {
+                    return (
+                        <p className="hidden lg:flex">
+                            {row
+                                .getValue("col4")
+                                .toLocaleDateString("it-IT", dateTimeOptions)}
+                        </p>
+                    );
+                },
+            },
+            {
+                header: "Stadio",
+                accessorKey: "col5",
+                cell: ({ row }) => {
+                    let html = "";
+
+                    switch (row.getValue("col5")) {
+                        case 0:
+                            html = (
+                                <div className="flex items-center justify-center gap-2 rounded-full xl:border border-gray-200 px-1 w-full">
+                                    <div className="bg-green-500 rounded-full w-4 h-4"></div>
+                                    <span className="hidden xl:block">
+                                        Aperto
+                                    </span>
+                                </div>
+                            );
+                            break;
+                        case 1:
+                            html = (
+                                <div className="flex items-center justify-center gap-2 rounded-full xl:border border-gray-200 px-1 w-full">
+                                    <div className="bg-yellow-500 rounded-full w-4 h-4"></div>
+                                    <span className="hidden xl:block">
+                                        Assegnato
+                                    </span>
+                                </div>
+                            );
+                            break;
+                        case 2:
+                            html = (
+                                <div className="flex items-center justify-center gap-2 rounded-full xl:border border-gray-200 px-1 w-full">
+                                    <div className="bg-orange-500 rounded-full w-4 h-4"></div>
+                                    <span className="hidden xl:block">
+                                        Elaborazione
+                                    </span>
+                                </div>
+                            );
+                            break;
+                        case 3:
+                            html = (
+                                <div className="flex items-center justify-center gap-2 rounded-full xl:border border-gray-200 px-1 w-full">
+                                    <div className="bg-purple-500 rounded-full w-4 h-4"></div>
+                                    <span className="hidden xl:block">
+                                        Attesa Utente
+                                    </span>
+                                </div>
+                            );
+                            break;
+                        case 4:
+                            html = (
+                                <div className="flex items-center justify-center gap-2 rounded-full xl:border border-gray-200 px-1 w-full">
+                                    <div className="bg-red-500 rounded-full w-4 h-4"></div>
+                                    <span className="hidden xl:block">
+                                        Chiuso
+                                    </span>
+                                </div>
+                            );
+                            break;
+                        default:
+                            html = <p>{row.getValue("col5")}</p>;
+                            break;
+                    }
+
+                    return html;
+                },
+                filterFn: (row, id, value) => {
+                    return value.includes(row.getValue(id));
+                },
+            },
+            {
+                header: "",
+                accessorKey: "col6",
+                cell: ({ row }) => {
+                    return (
+                        <a
+                            href={`/tickets/${row.getValue("col1")}`}
+                            className="bg-transparent p-2 flex items-center justify-center gap-2 rounded border border-gray-200"
+                        >
+                            <FaChevronRight className="text-gray-700" />
+                        </a>
+                    );
+                },
             },
         ],
         []
     );
 
-    const tableInstance = useTable({ columns, data });
+    const data = useMemo(
+        () =>
+            tickets.map((ticket) => {
+                let dt = new Date(ticket.created_at);
+                let dtScadenza = new Date(
+                    dt.setMinutes(dt.getMinutes() + ticket.time)
+                );
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        tableInstance;
+                return {
+                    col1: ticket.id,
+                    col2: ticket.request_type.label,
+                    col3: dt,
+                    col4: dtScadenza,
+                    col5: ticket.stadium,
+                    col6: "",
+                };
+            }),
+        []
+    );
 
     return (
         <div className="h-screen flex flex-col text-gray-700">
@@ -95,115 +243,8 @@ function Index() {
 
             {/* Lista dei ticket */}
 
-            <div className="flex-1 flex flex-col items-center gap-4 p-32 py-8 bg-gray-100 shadow-inner">
-                <section className="bg-white w-full rounded shadow">
-                    {/* Filtri */}
-
-                    <nav className="w-full flex items-center p-4 gap-2">
-                        <div className="font-semibold text-xl  flex items-center gap-2 text-gray-700 flex-[3_1_0%]">
-                            <h3>Ticket aperti</h3>
-                            <div className="bg-gray-100 hover:bg-gray-300 cursor-pointer rounded-full w-8 aspect-square flex flex-col items-center justify-center">
-                                5
-                            </div>
-                        </div>
-
-                        <div className="rounded border border-gray-200 flex items-center px-2 gap-1 flex-[2_1_0%]">
-                            <FaSearch className="text-gray-700" />
-                            <input
-                                type="search"
-                                name=""
-                                id=""
-                                className=" border-transparent focus:border-transparent focus:ring-0 text-gray-700"
-                                placeholder="Cerca "
-                            />
-                        </div>
-
-                        <button className="bg-transparent p-2 flex items-center gap-2 rounded border border-gray-200">
-                            <BiFilter className="text-gray-700" />
-                            Filtra
-                        </button>
-                    </nav>
-
-                    <section className="w-full p-4 shadow-inner">
-                        <table
-                            className="table-auto w-full"
-                            {...getTableProps()}
-                        >
-                            <thead>
-                                {headerGroups.map((headerGroup) => (
-                                    <tr {...headerGroup.getHeaderGroupProps()}>
-                                        {headerGroup.headers.map((column) => (
-                                            <th
-                                                {...column.getHeaderProps()}
-                                                className="text-left text-gray-400"
-                                            >
-                                                {column.render("Header")}
-                                            </th>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </thead>
-                            <tbody {...getTableBodyProps()}>
-                                {rows.map((row) => {
-                                    prepareRow(row);
-                                    return (
-                                        <tr
-                                            {...row.getRowProps()}
-                                            className="border-b border-gray-200"
-                                        >
-                                            {row.cells.map((cell) => {
-                                                return (
-                                                    <td
-                                                        {...cell.getCellProps()}
-                                                        className="py-2"
-                                                    >
-                                                        {cell.render("Cell")}
-                                                    </td>
-                                                );
-                                            })}
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </section>
-
-                    <section className="w-full flex items-center justify-between p-4 gap-2 ">
-                        <div className="flex items-center gap-2">
-                            <select
-                                name=""
-                                id="pages"
-                                className="rounded border border-gray-200 cursor-pointer  focus:border-gray-200 focus:ring-0"
-                            >
-                                <option value="">10</option>
-                                <option value="">20</option>
-                                <option value="">50</option>
-                            </select>
-                            <label htmlFor="pages">Righe per pagina</label>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <button className="bg-transparent p-2 flex items-center gap-2 rounded border border-gray-200">
-                                <FaChevronLeft className="text-gray-700" />
-                            </button>
-                            <span className="text-gray-700">Pagina</span>
-                            <select
-                                name=""
-                                id="pages"
-                                className="rounded border border-gray-200 cursor-pointer  focus:border-gray-200 focus:ring-0"
-                            >
-                                <option value="">1</option>
-                                <option value="">2</option>
-                                <option value="">3</option>
-                                <option value="">4</option>
-                            </select>
-                            <span className="text-gray-700">di 4</span>
-                            <button className="bg-transparent p-2 flex items-center gap-2 rounded border border-gray-200">
-                                <FaChevronRight className="text-gray-700" />
-                            </button>
-                        </div>
-                    </section>
-                </section>
+            <div className="flex-1 flex flex-col items-center gap-4 p-4 lg:p-32 py-8 bg-gray-100 shadow-inner">
+                <DataTable columns={columns} data={data} />
             </div>
         </div>
     );

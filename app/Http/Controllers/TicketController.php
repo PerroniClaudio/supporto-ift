@@ -16,7 +16,7 @@ class TicketController extends Controller
     public function index()
     {
         return Inertia::render('Ticket/Index', [
-            //
+            'tickets' => Ticket::where('stadium', '<>', '4' )->with('request_type')->latest()->get(),
         ]);
     }
 
@@ -41,7 +41,12 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        //
+        $ticket = Ticket::where('id', $ticket->id)->with('request_type')->first();
+
+        return Inertia::render('Ticket/Detail', [
+            'ticket' => $ticket,
+        ]);
+        
     }
 
     /**

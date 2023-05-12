@@ -1,0 +1,218 @@
+function GlobalFilter({
+    preGlobalFilteredRows,
+    globalFilter,
+    setGlobalFilter,
+}) {
+    const count = preGlobalFilteredRows.length;
+    const [value, setValue] = useState(globalFilter);
+    const onChange = useAsyncDebounce((value) => {
+        setGlobalFilter(value || undefined);
+    }, 200);
+
+    return (
+        <div className="rounded border border-gray-200 flex items-center px-2 gap-1 flex-[2_1_0%]">
+            <FaSearch className="text-gray-700" />
+            <input
+                type="search"
+                value={value || ""}
+                onChange={(e) => {
+                    setValue(e.target.value);
+                    onChange(e.target.value);
+                }}
+                className=" border-transparent focus:border-transparent focus:ring-0 text-gray-700 flex-1"
+                placeholder="Cerca "
+            />
+        </div>
+    );
+}
+
+<section className="bg-white w-full rounded shadow">
+    {/* Filtri */}
+
+    <nav className="w-full flex items-center p-4 gap-2">
+        <div className="font-semibold text-xl  flex items-center gap-2 text-gray-700 flex-[3_1_0%]">
+            <h3>Ticket aperti</h3>
+            <div className="bg-gray-100 hover:bg-gray-300 cursor-pointer rounded-full w-8 aspect-square flex flex-col items-center justify-center">
+                {aperti.length}
+            </div>
+        </div>
+
+        <GlobalFilter
+            preGlobalFilteredRows={preGlobalFilteredRows}
+            globalFilter={globalFilter}
+            setGlobalFilter={setGlobalFilter}
+        />
+
+        <button className="bg-transparent p-2 flex items-center gap-2 rounded border border-gray-200">
+            <BiFilter className="text-gray-700" />
+            Filtra
+        </button>
+    </nav>
+
+    <section className="w-full p-4 shadow-inner">
+        <table className="table-auto w-full" {...getTableProps()}>
+            <thead>
+                {headerGroups.map((headerGroup) => (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map((column) => (
+                            <th
+                                {...column.getHeaderProps()}
+                                className="text-left text-gray-400"
+                            >
+                                {column.render("Header")}
+                            </th>
+                        ))}
+                    </tr>
+                ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+                {page.map((row) => {
+                    prepareRow(row);
+                    return (
+                        <tr
+                            {...row.getRowProps()}
+                            className="border-b border-gray-200"
+                        >
+                            {row.cells.map((cell) => {
+                                if (cell.column.id === "col5") {
+                                    return getHtmlForStatus(cell);
+                                } else if (cell.column.id === "col6") {
+                                    return (
+                                        <td
+                                            {...cell.getCellProps()}
+                                            className="py-2"
+                                        >
+                                            <button className="bg-transparent p-2 flex items-center gap-2 rounded border border-gray-200">
+                                                <FaChevronRight className="text-gray-700" />
+                                            </button>
+                                        </td>
+                                    );
+                                }
+
+                                return (
+                                    <td
+                                        {...cell.getCellProps()}
+                                        className="py-2"
+                                    >
+                                        {cell.render("Cell")}
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
+    </section>
+
+    <section className="w-full flex items-center justify-between p-4 gap-2 ">
+        <div className="flex items-center gap-2">
+            <select
+                name=""
+                id="pages"
+                className="rounded border border-gray-200 cursor-pointer  focus:border-gray-200 focus:ring-0"
+                value={pageSize}
+                onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                }}
+            >
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                        {pageSize}
+                    </option>
+                ))}
+            </select>
+            <label htmlFor="pages">Righe per pagina</label>
+        </div>
+
+        <div className="flex items-center gap-2">
+            <button
+                className="bg-transparent p-2 flex items-center gap-2 rounded border border-gray-200"
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+            >
+                <FaChevronLeft className="text-gray-700" />
+            </button>
+            <span className="text-gray-700">Pagina</span>
+            <select
+                name=""
+                id="pages"
+                className="rounded border border-gray-200 cursor-pointer  focus:border-gray-200 focus:ring-0"
+                value={pageIndex}
+                onChange={(e) => {
+                    const page = e.target.value ? Number(e.target.value) : 0;
+                    gotoPage(page);
+                }}
+            >
+                {pagesOptionsSelect}
+            </select>
+            <span className="text-gray-700">di {pageOptions.length}</span>
+            <button
+                className="bg-transparent p-2 flex items-center gap-2 rounded border border-gray-200"
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+            >
+                <FaChevronRight className="text-gray-700" />
+            </button>
+        </div>
+    </section>
+</section>;
+
+const getHtmlForStatus = (cell) => {
+    let html = "";
+
+    switch (cell.value) {
+        case "aperto":
+            html = (
+                <td {...cell.getCellProps()} className="py-2 px-1">
+                    <div className="flex items-center gap-2 rounded-full 2xl:border border-gray-200 px-1 w-full">
+                        <div className="bg-green-500 rounded-full w-4 h-4"></div>
+                        <span className="hidden 2xl:block">Aperto</span>
+                    </div>
+                </td>
+            );
+            break;
+        case "assegnato":
+            html = (
+                <td {...cell.getCellProps()} className="py-2 px-1">
+                    <div className="flex items-center gap-2 rounded-full 2xl:border border-gray-200 px-1 w-full">
+                        <div className="bg-yellow-500 rounded-full w-4 h-4"></div>
+                        <span className="hidden 2xl:block">Assegnato</span>
+                    </div>
+                </td>
+            );
+            break;
+        case "elaborazione":
+            html = (
+                <td {...cell.getCellProps()} className="py-2 px-1">
+                    <div className="flex items-center gap-2 rounded-full 2xl:border border-gray-200 px-1 w-full">
+                        <div className="bg-orange-500 rounded-full w-4 h-4"></div>
+                        <span className="hidden 2xl:block">Elaborazione</span>
+                    </div>
+                </td>
+            );
+            break;
+        case "attesa_utente":
+            html = (
+                <td {...cell.getCellProps()} className="py-2 px-1">
+                    <div className="flex items-center gap-2 rounded-full 2xl:border border-gray-200 px-1 w-full">
+                        <div className="bg-purple-500 rounded-full w-4 h-4"></div>
+                        <span className="hidden 2xl:block">Attesa Utente</span>
+                    </div>
+                </td>
+            );
+            break;
+        case "chiuso":
+            html = (
+                <td {...cell.getCellProps()} className="py-2 px-1">
+                    <div className="flex items-center gap-2 rounded-full 2xl:border border-gray-200 px-1 w-full">
+                        <div className="bg-red-500 rounded-full w-4 h-4"></div>
+                        <span className="hidden 2xl:block">Chiuso</span>
+                    </div>
+                </td>
+            );
+            break;
+    }
+
+    return html;
+};
