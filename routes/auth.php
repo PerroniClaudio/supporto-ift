@@ -57,3 +57,13 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });
+
+
+
+/*
+    Login con 365 
+*/
+
+Route::get('/login/microsoft', [AuthenticatedSessionController::class, 'redirectToMicrosoft'])->name('login.microsoft');
+Route::get('/login/microsoft/callback', [AuthenticatedSessionController::class, 'handleMicrosoftCallback'])->name('login.microsoft.callback');
+
