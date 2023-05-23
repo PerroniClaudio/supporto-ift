@@ -1,16 +1,32 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/react';
+import ApplicationLogo from "@/Components/ApplicationLogo";
+import { Link } from "@inertiajs/react";
+import { RxArrowTopRight } from "react-icons/rx";
+import image from "../../assets/trianglify-lowres.png";
 
 export default function Guest({ children }) {
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <Link href="/">
-                    <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-                </Link>
-            </div>
+        <div className="flex h-screen text-gray-700">
+            <div
+                className="hidden lg:block flex-1 bg-no-repeat bg-cover bg-center"
+                style={{ backgroundImage: `url(${image})` }}
+            ></div>
+            <div className="flex-1 bg-white shadow-inner flex flex-col items-center justify-between">
+                <nav className="flex justify-between p-4 mx-4 w-full">
+                    <div className="bg-gray-700 p-4 rounded-full">
+                        <img
+                            src="https://ifortech.com/assets/images/logo-header.png"
+                            alt="logo"
+                            className="w-32"
+                        />
+                    </div>
 
-            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+                    <a
+                        href="https://ifortech.com/"
+                        className="flex items-center gap-1 text-red-500"
+                    >
+                        Visita ifortech.com <RxArrowTopRight />
+                    </a>
+                </nav>
                 {children}
             </div>
         </div>

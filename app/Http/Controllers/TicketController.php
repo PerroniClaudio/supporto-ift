@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\RequestType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,6 +18,7 @@ class TicketController extends Controller
     {
         return Inertia::render('Ticket/Index', [
             'tickets' => Ticket::where('stadium', '<>', '4' )->with('request_type')->latest()->get(),
+            'request_types' => RequestType::all(),
         ]);
     }
 
@@ -25,7 +27,7 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
+        //        
     }
 
     /**
@@ -34,6 +36,23 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         //
+
+        $request->validate([
+            'request_type' => ['required', 'exists:request_types,id'],
+            'description' => ['required', 'string'],
+        ]);
+
+        Ticket::create([
+            'request_type' => $request->request_type,
+            'description' => $request->description,
+            'user_id' => 0,
+            'time' => 180
+        ]);
+
+        $id = Ticket::latest()->first()->id;
+        
+        return redirect()->route('tickets.show', $id);
+
     }
 
     /**

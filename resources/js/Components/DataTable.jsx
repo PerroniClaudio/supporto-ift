@@ -147,7 +147,7 @@ export function DataTable({ columns, data }) {
                         >
                             <div className="flex items-center gap-2 rounded-full px-1 w-full">
                                 <div className="bg-green-500 rounded-full w-4 h-4"></div>
-                                <span className="hidden 2xl:block">Aperto</span>
+                                <span className="hidden lg:block">Aperto</span>
                             </div>
                         </DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem
@@ -158,7 +158,7 @@ export function DataTable({ columns, data }) {
                         >
                             <div className="flex items-center gap-2 rounded-full px-1 w-full">
                                 <div className="bg-yellow-500 rounded-full w-4 h-4"></div>
-                                <span className="hidden 2xl:block">
+                                <span className="hidden lg:block">
                                     Assegnato
                                 </span>
                             </div>
@@ -171,7 +171,7 @@ export function DataTable({ columns, data }) {
                         >
                             <div className="flex items-center gap-2 rounded-full px-1 w-full">
                                 <div className="bg-orange-500 rounded-full w-4 h-4"></div>
-                                <span className="hidden 2xl:block">
+                                <span className="hidden lg:block">
                                     Elaborazione
                                 </span>
                             </div>
@@ -184,7 +184,7 @@ export function DataTable({ columns, data }) {
                         >
                             <div className="flex items-center gap-2 rounded-full px-1 w-full">
                                 <div className="bg-purple-500 rounded-full w-4 h-4"></div>
-                                <span className="hidden 2xl:block">
+                                <span className="hidden lg:block">
                                     Attesa Utente
                                 </span>
                             </div>

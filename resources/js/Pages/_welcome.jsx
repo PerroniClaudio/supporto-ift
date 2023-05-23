@@ -220,72 +220,72 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
                                     <p className="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                                         Laravel's robust library of first-party
-                                        tools and libraries, such as
+                                        tools and libraries, such as{" "}
                                         <a
                                             href="https://forge.laravel.com"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Forge
                                         </a>
-                                        ,
+                                        ,{" "}
                                         <a
                                             href="https://vapor.laravel.com"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Vapor
                                         </a>
-                                        ,
+                                        ,{" "}
                                         <a
                                             href="https://nova.laravel.com"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Nova
                                         </a>
-                                        , and
+                                        , and{" "}
                                         <a
                                             href="https://envoyer.io"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Envoyer
-                                        </a>
+                                        </a>{" "}
                                         help you take your projects to the next
                                         level. Pair them with powerful open
-                                        source libraries like
+                                        source libraries like{" "}
                                         <a
                                             href="https://laravel.com/docs/billing"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Cashier
                                         </a>
-                                        ,
+                                        ,{" "}
                                         <a
                                             href="https://laravel.com/docs/dusk"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Dusk
                                         </a>
-                                        ,
+                                        ,{" "}
                                         <a
                                             href="https://laravel.com/docs/broadcasting"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Echo
                                         </a>
-                                        ,
+                                        ,{" "}
                                         <a
                                             href="https://laravel.com/docs/horizon"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Horizon
                                         </a>
-                                        ,
+                                        ,{" "}
                                         <a
                                             href="https://laravel.com/docs/sanctum"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                         >
                                             Sanctum
                                         </a>
-                                        ,
+                                        ,{" "}
                                         <a
                                             href="https://laravel.com/docs/telescope"
                                             className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
